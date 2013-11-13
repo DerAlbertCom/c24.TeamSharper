@@ -66,7 +66,7 @@ namespace C24.TeamSharper
         private bool AreEqual(TeamSharperSettings teamSharperSettings, DotSettings dotSettings)
         {
             // We require the absolute path to be our exact dummy to enshure constistency:
-            if (dotSettings.Layers.Any(x => x.AbsolutePath.Equals(absolutePathDummy, StringComparison.Ordinal)))
+            if (dotSettings.Layers.Any(x => !x.AbsolutePath.Equals(absolutePathDummy, StringComparison.Ordinal)))
             {
                 return false;
             }
@@ -99,14 +99,15 @@ namespace C24.TeamSharper
             dotSettings.Layers.Clear();
             foreach (TeamSharperSettingsLayer teamSharperSettingsLayer in teamSharperSettings.Layers.OrderBy(x => x.RelativePriority))
             {
+                string layerReferenceAbsolute = PathHelper.MakeFilePathAbsoluteToDirectory(teamSharperSettingsLayer.RelativePath, teamSharperSettings.FilePath);
+                string layerReferenceRelativeToSolution = PathHelper.MakeFilePathRelativeToDirectory(layerReferenceAbsolute, dotSettings.FilePath);
+
                 dotSettings.Layers.Add(new DotSettingsLayer
                 {
                     Id = teamSharperSettingsLayer.Id,
                     AbsolutePath = absolutePathDummy,
                     RelativePriority = teamSharperSettingsLayer.RelativePriority,
-                    RelativePath = PathHelper.MakeFilePathRelativeToDirectory(
-                        PathHelper.MakeFilePathAbsoluteToDirectory(teamSharperSettingsLayer.RelativePath, Path.GetDirectoryName(teamSharperSettings.FilePath)),
-                        dotSettings.FilePath)
+                    RelativePath = layerReferenceRelativeToSolution
                 });
             }
         }

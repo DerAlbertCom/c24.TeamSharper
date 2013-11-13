@@ -55,7 +55,7 @@ namespace C24.TeamSharper.Tests
         }
 
         [Test]
-        public void Test_if_AdjustPathsInDotSettings_produces_correct_paths()
+        public void Test_if_AdjustPathsInDotSettings_produces_correct_paths_if_different_directory()
         {
             // Arrange:
             const string solutionSearchRootDirectory = @"C:\dev\src\solutions";
@@ -99,8 +99,57 @@ namespace C24.TeamSharper.Tests
 
             // Assert:
             Assert.AreEqual(2, dotSettings.Layers.Count);
-            Assert.AreEqual(@"..\..\config\team\layers\ResharperSettings.Layer1.DotSettings", dotSettings.Layers[0].RelativePath);
-            Assert.AreEqual(@"..\..\config\team\layers\ResharperSettings.Layer2.DotSettings", dotSettings.Layers[1].RelativePath);
+            Assert.AreEqual(@"..\..\..\config\team\layers\ResharperSettings.Layer1.DotSettings", dotSettings.Layers[0].RelativePath);
+            Assert.AreEqual(@"..\..\..\config\team\layers\ResharperSettings.Layer2.DotSettings", dotSettings.Layers[1].RelativePath);
+        }
+
+        [Test]
+        public void Test_if_AdjustPathsInDotSettings_produces_correct_paths_if_same_directory()
+        {
+            // Arrange:
+            const string solutionSearchRootDirectory = @"C:\dev\src";
+            const string teamSharperSettingsFile = @"C:\dev\src\TeamSettings.json";
+            DotSettings dotSettings = new DotSettings(@"C:\dev\src\SomeSolution.sln.DotSettings", Enumerable.Empty<DotSettingsLayer>(), false);
+            TeamSharperSettings teamSharperSettings = new TeamSharperSettings
+            {
+                FilePath = teamSharperSettingsFile,
+                Layers = new Collection<TeamSharperSettingsLayer>
+                {
+                    new TeamSharperSettingsLayer
+                    {
+                        Id = Guid.NewGuid(),
+                        RelativePath = @"Settings1.DotSettings",
+                        RelativePriority = 1
+                    },
+                    new TeamSharperSettingsLayer
+                    {
+                        Id = Guid.NewGuid(),
+                        RelativePath = @"Settings2.DotSettings",
+                        RelativePriority = 2
+                    }
+                }
+            };
+
+            MockRepository repo = new MockRepository(MockBehavior.Strict);
+            Mock<IDotSettingsSerializer> dotSettingsSerializer = repo.Create<IDotSettingsSerializer>();
+            Mock<ITeamSharperSettingsSerializer> teamSharperSettingsSerializer = repo.Create<ITeamSharperSettingsSerializer>();
+
+            dotSettingsSerializer.Setup(x => x.LoadAll(solutionSearchRootDirectory)).Returns(new[] { dotSettings });
+            teamSharperSettingsSerializer.Setup(x => x.Load(teamSharperSettingsFile)).Returns(teamSharperSettings);
+
+            DotSettingsProcessor processor = new DotSettingsProcessor(
+                teamSharperSettingsFile,
+                solutionSearchRootDirectory,
+                dotSettingsSerializer.Object,
+                teamSharperSettingsSerializer.Object);
+
+            // Act:
+            processor.AdjustPathsInDotSettings(dotSettings, teamSharperSettings);
+
+            // Assert:
+            Assert.AreEqual(2, dotSettings.Layers.Count);
+            Assert.AreEqual(@"..\Settings1.DotSettings", dotSettings.Layers[0].RelativePath);
+            Assert.AreEqual(@"..\Settings2.DotSettings", dotSettings.Layers[1].RelativePath);
         }
     }
 }

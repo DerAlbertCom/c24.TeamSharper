@@ -30,7 +30,7 @@ namespace C24.TeamSharper
             }
 
             string directory = Path.GetDirectoryName(filePath);
-            string newRelativeDirectory = GetNavigationPath(baseDirectory, directory);
+            string newRelativeDirectory = GetNavigationPath(EnsureTrailingBackslash(baseDirectory), EnsureTrailingBackslash(directory));
             return Path.Combine(newRelativeDirectory, fileName);
         }
 

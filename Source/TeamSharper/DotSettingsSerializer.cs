@@ -31,9 +31,9 @@ namespace C24.TeamSharper
                 Xmlns.Winfx + "ResourceDictionary",
                 new XAttribute(XNamespace.Xml + "space", "preserve"),
                 new XAttribute(XNamespace.Xmlns + "x", Xmlns.Xaml.NamespaceName),
-                new XAttribute(XNamespace.Xml + "s", Xmlns.Corlib.NamespaceName),
-                new XAttribute(XNamespace.Xml + "ss", Xmlns.Storage.NamespaceName),
-                new XAttribute(XNamespace.Xml + "wpf", Xmlns.Winfx.NamespaceName),
+                new XAttribute(XNamespace.Xmlns + "s", Xmlns.Corlib.NamespaceName),
+                new XAttribute(XNamespace.Xmlns + "ss", Xmlns.Storage.NamespaceName),
+                new XAttribute(XNamespace.Xmlns + "wpf", Xmlns.Winfx.NamespaceName),
                 dotSettings.Layers.OrderBy(x => x.RelativePriority).SelectMany(CreateLayerElements));
         }
 

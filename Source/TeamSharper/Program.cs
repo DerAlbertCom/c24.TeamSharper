@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using CommandLine;
@@ -36,16 +37,23 @@ namespace C24.TeamSharper
             string settingsFile = PathHelper.MakeFilePathAbsoluteToDirectory(commandLineOptions.SettingsPath, applicationDirectory);
             string rootDirectory = PathHelper.MakeFilePathAbsoluteToDirectory(commandLineOptions.SearchDirectory, applicationDirectory);
 
-            IEnumerable<Change> changes = new DotSettingsProcessor(settingsFile, rootDirectory).CalculateChanges();
+            List<Change> changes = new DotSettingsProcessor(settingsFile, rootDirectory).CalculateChanges().ToList();
 
-            Console.WriteLine("The following changes {0} applied:", commandLineOptions.Test ? "would be" : "are");
-            foreach (Change change in changes)
+            if (changes.Any())
             {
-                Console.WriteLine("-> {0}", change.Description);
-                if (!commandLineOptions.Test)
+                Console.WriteLine("The following changes {0} applied:", commandLineOptions.Test ? "would be" : "are");
+                foreach (Change change in changes)
                 {
-                    change.Apply();
+                    Console.WriteLine("-> {0}", change.Description);
+                    if (!commandLineOptions.Test)
+                    {
+                        change.Apply();
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("No changes {0} applied, you're already up to date!", commandLineOptions.Test ? "would be" : "are");
             }
         }
     }

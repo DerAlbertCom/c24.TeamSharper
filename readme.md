@@ -11,15 +11,15 @@ All actions of TeamSharper are controlled using a central settings file containi
 	{
 	    "layers": [{
 	        "id": "F0B47A2A84C84BA38AC884675483C3DE",
-	        "relativePath": "Subfolder1/Basic-Coding-Guidelines-All-Languages.DotSettings",
+	        "relativePath": "..\\Subfolder1\\Basic-Coding-Guidelines-All-Languages.DotSettings",
 	        "relativePriority": 1
 	    }, {
 	        "id": "B3EEAD2BD91042EC8E45199EA4B8BFFB",
-	        "relativePath": "Subfolder2/Advanced-CSharp-Coding-Guidelines.DotSettings",
+	        "relativePath": "..\\Subfolder2\\Advanced-CSharp-Coding-Guidelines.DotSettings",
 	        "relativePriority": 2
 	    }, {
 	        "id": "436A1EC43C0F47229CE331DBA473D0C9",
-	        "relativePath": "Subfolder3/Special-JavaScript-Coding-Guidelines.DotSettings",
+	        "relativePath": "..\\Subfolder3\\Special-JavaScript-Coding-Guidelines.DotSettings",
 	        "relativePriority": 3
 	    }]
 	}
@@ -43,6 +43,10 @@ This will go up one directory to the `my-settings.json` file, read the configura
 ### How it works
 
 TeamSharper creates or modifies a `\*.sln.DotSettings` file for every Solution (`\*.sln`) file containing links to the referenced `*.DotSettings` files. These links are saved as relative Paths. There is also an absolute path which ReSharper will happily ignore if it's invalid (and TeamSharper will provide an invalid one). This is because, if ReSharper only follows the relative path, you can check in all the settings into your source control system, and it will work even if every team member checks out the code to a different location. That's certainly not the most solid solution but the only one we could think of that allows us to automatically **deploy** and **update** ReSharper settings for the entire team (without resorting to DrobBox or similar services).
+
+### How to build
+
+Make sure to enable automatic NuGet package download/restore during build in Visual Studio.
 
 -----
 

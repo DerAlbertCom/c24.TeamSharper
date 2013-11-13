@@ -9,60 +9,50 @@ namespace C24.TeamSharper.Tests
         public void Test_if_relative_path_is_resolved_correctly_without_root_backslash()
         {
             const string basePath = "C:\\root";
-            const string relativePath = "test";
+            const string relativePath = "test\\file.txt";
             string result = PathHelper.MakeFilePathAbsoluteToDirectory(relativePath, basePath);
 
-            Assert.AreEqual("C:\\root\\test", result);
+            Assert.AreEqual("C:\\root\\test\\file.txt", result);
         }
 
         [Test]
         public void Test_if_relative_path_is_resolved_correctly_with_root_backslash()
         {
             const string basePath = "C:\\root\\";
-            const string relativePath = "test";
+            const string relativePath = "test\\file.txt";
             string result = PathHelper.MakeFilePathAbsoluteToDirectory(relativePath, basePath);
 
-            Assert.AreEqual("C:\\root\\test", result);
-        }
-
-        [Test]
-        public void Test_if_relative_path_is_resolved_correctly_with_root_backslash_and_relative_backslash()
-        {
-            const string basePath = "C:\\root\\";
-            const string relativePath = "test\\";
-            string result = PathHelper.MakeFilePathAbsoluteToDirectory(relativePath, basePath);
-
-            Assert.AreEqual("C:\\root\\test", result);
+            Assert.AreEqual("C:\\root\\test\\file.txt", result);
         }
 
         [Test]
         public void Test_if_relative_path_is_resolved_correctly_with_backslashes_on_every_end()
         {
             const string basePath = "C:\\root\\";
-            const string relativePath = ".\\test\\";
+            const string relativePath = ".\\test\\file.txt";
             string result = PathHelper.MakeFilePathAbsoluteToDirectory(relativePath, basePath);
 
-            Assert.AreEqual("C:\\root\\test", result);
+            Assert.AreEqual("C:\\root\\test\\file.txt", result);
         }
 
         [Test]
         public void Test_if_relative_path_is_resolved_correctly_with_navigation()
         {
             const string basePath = "C:\\root\\second";
-            const string relativePath = "..\\test";
+            const string relativePath = "..\\test\\file.txt";
             string result = PathHelper.MakeFilePathAbsoluteToDirectory(relativePath, basePath);
 
-            Assert.AreEqual("C:\\root\\test", result);
+            Assert.AreEqual("C:\\root\\test\\file.txt", result);
         }
 
         [Test]
         public void Test_if_relative_path_is_resolved_correctly_with_already_absolute_path()
         {
             const string basePath = "C:\\root\\second";
-            const string relativePath = "C:\\root\\test\\";
+            const string relativePath = "C:\\root\\test\\file.txt";
             string result = PathHelper.MakeFilePathAbsoluteToDirectory(relativePath, basePath);
 
-            Assert.AreEqual("C:\\root\\test", result);
+            Assert.AreEqual("C:\\root\\test\\file.txt", result);
         }
 
         [Test]
