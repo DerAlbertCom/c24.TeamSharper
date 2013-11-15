@@ -36,7 +36,7 @@ Once you have a valid settings file at hand, you can execute TeamSharper using t
 
 Example:
 
-	TeamSharper.exe -s "..\my-settings.json" -d "..\..\src\trunk\"
+	TeamSharper.exe -s "..\my-settings.json" -d "..\..\src\trunk"
 
 This will go up one directory to the `my-settings.json` file, read the configuration, and apply it to all solutions  beneath the `trunk` directory.
 
