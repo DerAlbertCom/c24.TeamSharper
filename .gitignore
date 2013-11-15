@@ -1,2 +1,7 @@
-Source/packages
 *.suo
+*.user
+*.DotSettings
+
+bin/
+obj/
+packages/
