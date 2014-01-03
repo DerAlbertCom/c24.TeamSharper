@@ -12,13 +12,7 @@ namespace C24.TeamSharper
             {
                 throw new ArgumentException("filePath must be an absolute or relative path to a file.", "filePath");
             }
-
-            Uri target = new Uri(EnsureTrailingBackslash(filePath), UriKind.RelativeOrAbsolute);
-            string absolutePath = target.IsAbsoluteUri
-                ? RemoveTrailingBackslash(target.LocalPath)
-                : new Uri(new Uri(EnsureTrailingBackslash(baseDirectory), UriKind.Absolute), target).LocalPath;
-
-            return RemoveTrailingBackslash(absolutePath);
+            return Path.GetFullPath(Path.Combine(baseDirectory, filePath));
         }
 
         public static string MakeFilePathRelativeToDirectory(string filePath, string baseDirectory)
@@ -28,7 +22,6 @@ namespace C24.TeamSharper
             {
                 throw new ArgumentException("filePath must be an absolute path to a file.", "filePath");
             }
-
             string directory = Path.GetDirectoryName(filePath);
             string newRelativeDirectory = GetNavigationPath(EnsureTrailingBackslash(baseDirectory), EnsureTrailingBackslash(directory));
             return Path.Combine(newRelativeDirectory, fileName);

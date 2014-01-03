@@ -99,7 +99,7 @@ namespace C24.TeamSharper
             dotSettings.Layers.Clear();
             foreach (TeamSharperSettingsLayer teamSharperSettingsLayer in teamSharperSettings.Layers.OrderBy(x => x.RelativePriority))
             {
-                string layerReferenceAbsolute = PathHelper.MakeFilePathAbsoluteToDirectory(teamSharperSettingsLayer.RelativePath, teamSharperSettings.FilePath);
+                string layerReferenceAbsolute = PathHelper.MakeFilePathAbsoluteToDirectory(teamSharperSettingsLayer.RelativePath, Path.GetDirectoryName(teamSharperSettings.FilePath));
                 string layerReferenceRelativeToSolution = PathHelper.MakeFilePathRelativeToDirectory(layerReferenceAbsolute, dotSettings.FilePath);
 
                 dotSettings.Layers.Add(new DotSettingsLayer
